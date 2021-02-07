@@ -9,6 +9,9 @@ public class SaveBinary : ISaveFile
 {
     const string FILE_EXTENSION = ".bin";
 
+    IReadFile<Dictionary<string, object>> readFile = new ReadFileBinary();
+    IWriteFile<Dictionary<string, object>> writeFile = new WriteFileBinary();
+
     public void Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
@@ -29,14 +32,9 @@ public class SaveBinary : ISaveFile
             TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded
         };
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            byte[] data = File.ReadAllBytes(filePath);
-
-            using (var memoryStream = new MemoryStream(data))
-            {
-                keyValuePairs = binaryFormatter.Deserialize(memoryStream) as Dictionary<string, object>;
-            }
+            keyValuePairs = readFile.GetContent(filePath);
 
             if (keyValuePairs.ContainsKey(key))
             {
@@ -54,10 +52,7 @@ public class SaveBinary : ISaveFile
             keyValuePairs.Add(key, saveItemObject);
         }
 
-        using (var fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            binaryFormatter.Serialize(fileStream, keyValuePairs);
-        }
+        writeFile.WriteFile(filePath, keyValuePairs);
     }
 
     public void Save(Dictionary<string, object> itemsDictionary, string filePath)
@@ -78,14 +73,9 @@ public class SaveBinary : ISaveFile
             TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded
         };
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            byte[] data = File.ReadAllBytes(filePath);
-
-            using (var memoryStream = new MemoryStream(data))
-            {
-                keyValuePairs = binaryFormatter.Deserialize(memoryStream) as Dictionary<string, object>;
-            }
+            keyValuePairs = readFile.GetContent(filePath);
 
             foreach (var key in itemsDictionary.Keys)
             {
@@ -112,10 +102,6 @@ public class SaveBinary : ISaveFile
             keyValuePairs = itemsDictionary;
         }
 
-        using (var fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            binaryFormatter.Serialize(fileStream, keyValuePairs);
-        }
-
+        writeFile.WriteFile(filePath, keyValuePairs);
     }
 }

@@ -8,6 +8,9 @@ public class SaveJson : ISaveFile
 {
     const string FILE_EXTENSION = ".json";
 
+    IReadFile<string> readFile = new ReadFileJson();
+    IWriteFile<string> writeFile = new WriteFileJson();
+
     public void Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
@@ -24,9 +27,9 @@ public class SaveJson : ISaveFile
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            string data = File.ReadAllText(filePath);
+            string data = readFile.GetContent(filePath);
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
             if (keyValuePairs.ContainsKey(key))
@@ -45,8 +48,9 @@ public class SaveJson : ISaveFile
             keyValuePairs.Add(key, jsonData);
         }
 
-        File.WriteAllText(filePath, JsonConvert.SerializeObject(keyValuePairs));
+        string jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
+        writeFile.WriteFile(filePath, jsonString);
     }
 
     public void Save(Dictionary<string, object> itemsDictionary, string filePath)
@@ -61,9 +65,9 @@ public class SaveJson : ISaveFile
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            string data = File.ReadAllText(filePath);
+            string data = readFile.GetContent(filePath);
 
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
@@ -92,7 +96,8 @@ public class SaveJson : ISaveFile
             keyValuePairs = itemsDictionary;
         }
 
-        File.WriteAllText(filePath, JsonConvert.SerializeObject(keyValuePairs));
+        string jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
+        writeFile.WriteFile(filePath, jsonString);
     }
 }

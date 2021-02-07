@@ -10,15 +10,17 @@ public class LoadProtoBuf : ILoadFile
 {
     const string FILE_EXTENSION = ".prot";
 
+    IReadFile<FileStream> readFile = new ReadFileProtoBuf();
+
     public T Load<T>(string key, string filePath)
     {
         filePath += FILE_EXTENSION;
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
             Dictionary<string, object> keyValuePairs;
 
-            string jsonString = Serializer.Deserialize<string>(new FileStream(filePath, FileMode.Open, FileAccess.Read));
+            string jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
 
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 

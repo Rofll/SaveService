@@ -9,15 +9,17 @@ public class LoadJoson : ILoadFile
 {
     const string FILE_EXTENSION = ".json";
 
+    IReadFile<string> readFile = new ReadFileJson();
+
     public T Load<T>(string key, string filePath)
     {
         filePath += FILE_EXTENSION;
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
             
             Dictionary<string, object> keyValuePairs;
-            keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(filePath));
+            keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(readFile.GetContent(filePath));
 
             if (keyValuePairs.ContainsKey(key))
             {

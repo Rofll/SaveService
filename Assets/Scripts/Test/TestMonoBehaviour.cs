@@ -24,19 +24,6 @@ public class TestMonoBehaviour : MonoBehaviour
 
     void Start()
     {
-        //test2.Key = "andSomed";
-        //test2.Name = "YURA";
-        //saveService.Save(test.Key,test,ESaveFormat.Json, Application.persistentDataPath + "/mainConfigFile.json");
-        //saveService.Save(test2.Key, test2, ESaveFormat.Json, Application.persistentDataPath + "/mainConfigFile.json");
-        //saveService.Save(test.Key, test, ESaveFormat.Binary, Application.persistentDataPath + "/mainConfigFile.bin");
-        //Debug.LogError(Application.persistentDataPath);
-        //Test test3 = saveService.Load<Test>(test2.Key, ESaveFormat.Json, Application.persistentDataPath + "/mainConfigFile.json");
-        //Debug.LogError(test3.Key);
-        //Debug.LogError(saveService.Load<Test>(test.Key, ESaveFormat.Binary, Application.persistentDataPath + "/mainConfigFile.bin"));
-        //saveService.Save("asd", 1);
-        //Debug.LogError(saveService.Load<Test>(test.Key).ToString());
-        //Debug.LogError(saveService.Load<int>("asd").ToString());
-
         test.Key = "test1";
         test2.Key = "test2";
 
@@ -45,13 +32,20 @@ public class TestMonoBehaviour : MonoBehaviour
         savePool.AddSaveItem(test.Key, test);
         savePool.AddSaveItem(test2.Key, test2);
 
-        //saveJson.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
-        //saveBinary.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        Debug.LogError("PlayerPrefs");
+        savePalyerPrefs.Save(savePool.SaveDictionary);
+        Debug.LogError(loadPalyerPrefs.Load<Test>(test.Key));
 
-        //Debug.LogError(loadJson.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
-        //Debug.LogError(loadBinary.Load<Test>(test2.Key, Application.persistentDataPath + "/mainConfigFile"));
+        Debug.LogError("JSon");
+        saveJson.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        Debug.LogError(loadJson.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
 
-        saveProtoBuf.Save(test.Key, savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        Debug.LogError("Binary");
+        saveBinary.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        Debug.LogError(loadBinary.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
+
+        Debug.LogError("ProtoBuf");
+        saveProtoBuf.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
         Debug.LogError(loadProtoBuf.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
     }
 }

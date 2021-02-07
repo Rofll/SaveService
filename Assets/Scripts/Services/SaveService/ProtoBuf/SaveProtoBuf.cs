@@ -9,6 +9,9 @@ public class SaveProtoBuf : ISaveFile
 {
     const string FILE_EXTENSION = ".prot";
 
+    IReadFile<FileStream> readFile = new ReadFileProtoBuf();
+    IWriteFile<string> writeFile = new WriteFileProtoBuf();
+
     public void Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
@@ -25,9 +28,9 @@ public class SaveProtoBuf : ISaveFile
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            jsonString = Serializer.Deserialize<string>(new FileStream(filePath, FileMode.Open, FileAccess.Read));
+            jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
             if (keyValuePairs.ContainsKey(key))
@@ -48,12 +51,7 @@ public class SaveProtoBuf : ISaveFile
 
         jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
-        using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        {
-            Serializer.Serialize(stream, jsonString);
-            stream.Flush();
-        }
-
+        writeFile.WriteFile(filePath, jsonString);
     }
 
     public void Save(Dictionary<string, object> itemsDictionary, string filePath)
@@ -69,9 +67,9 @@ public class SaveProtoBuf : ISaveFile
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
         string jsonString;
 
-        if (File.Exists(filePath))
+        if (readFile.Exists(filePath))
         {
-            jsonString = Serializer.Deserialize<string>(new FileStream(filePath, FileMode.Open, FileAccess.Read));
+            jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
             foreach (var key in itemsDictionary.Keys)
@@ -101,11 +99,6 @@ public class SaveProtoBuf : ISaveFile
 
         jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
-        using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        {
-            Serializer.Serialize(stream, jsonString);
-            stream.Flush();
-        }
-
+        writeFile.WriteFile(filePath, jsonString);
     }
 }

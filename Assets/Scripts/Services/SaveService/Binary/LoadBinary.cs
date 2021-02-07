@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class LoadBinary : ILoadFile
 {
     const string FILE_EXTENSION = ".bin";
+
+    IReadFile<Dictionary<string, object>> readFile = new ReadFileBinary();
 
     public T Load<T>(string key, string filePath)
     {
@@ -14,20 +14,9 @@ public class LoadBinary : ILoadFile
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-        BinaryFormatter binaryFormatter = new BinaryFormatter()
+        if (readFile.Exists(filePath))
         {
-            AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple,
-            TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded
-        };
-
-        if (File.Exists(filePath))
-        {
-            byte[] data = File.ReadAllBytes(filePath);
-
-            using (var memoryStream = new MemoryStream(data))
-            {
-                keyValuePairs = binaryFormatter.Deserialize(memoryStream) as Dictionary<string, object>;
-            }
+            keyValuePairs = readFile.GetContent(filePath);
 
             if (keyValuePairs.ContainsKey(key))
             {
