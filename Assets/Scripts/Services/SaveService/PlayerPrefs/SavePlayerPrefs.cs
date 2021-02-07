@@ -17,4 +17,26 @@ public class SavePlayerPrefs : ISavePalyerPrefs
 
         PlayerPrefs.SetString(key, jsonData);
     }
+
+    public void Save(Dictionary<string, object> keyValuePairs)
+    {
+        if (keyValuePairs == null)
+        {
+            Debug.LogError("Dictionary keyValuePairs == null!");
+            return;
+        }
+
+        foreach (var key in keyValuePairs.Keys)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError("Key = nullOrEmpty!");
+                continue;
+            }
+
+            string jsonData = JsonConvert.SerializeObject(keyValuePairs[key]);
+
+            PlayerPrefs.SetString(key, jsonData);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ProtoBuf;
 
 public class TestMonoBehaviour : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class TestMonoBehaviour : MonoBehaviour
     private ILoadFile loadJson = new LoadJoson();
     private ISaveFile saveBinary = new SaveBinary();
     private ILoadFile loadBinary = new LoadBinary();
+    private ISavePool savePool = new SavePool();
 
 
     void Start()
@@ -32,18 +34,16 @@ public class TestMonoBehaviour : MonoBehaviour
         //Debug.LogError(saveService.Load<Test>(test.Key).ToString());
         //Debug.LogError(saveService.Load<int>("asd").ToString());
 
-        Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-
         test.Key = "test1";
         test2.Key = "test2";
 
         test.hp = 20;
 
-        keyValuePairs.Add(test.Key, test);
-        keyValuePairs.Add(test2.Key, test2);
+        savePool.AddSaveItem(test.Key, test);
+        savePool.AddSaveItem(test2.Key, test2);
 
-        saveJson.Save(keyValuePairs, Application.persistentDataPath + "/mainConfigFile");
-        saveBinary.Save(keyValuePairs, Application.persistentDataPath + "/mainConfigFile");
+        saveJson.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        saveBinary.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
 
         Debug.LogError(loadJson.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
         Debug.LogError(loadBinary.Load<Test>(test2.Key, Application.persistentDataPath + "/mainConfigFile"));
