@@ -16,7 +16,10 @@ public class TestMonoBehaviour : MonoBehaviour
     private ILoadFile loadJson = new LoadJoson();
     private ISaveFile saveBinary = new SaveBinary();
     private ILoadFile loadBinary = new LoadBinary();
+    private ISaveFile saveProtoBuf = new SaveProtoBuf();
+    private ILoadFile loadProtoBuf = new LoadProtoBuf();
     private ISavePool savePool = new SavePool();
+
 
 
     void Start()
@@ -42,16 +45,13 @@ public class TestMonoBehaviour : MonoBehaviour
         savePool.AddSaveItem(test.Key, test);
         savePool.AddSaveItem(test2.Key, test2);
 
-        saveJson.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
-        saveBinary.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        //saveJson.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        //saveBinary.Save(savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
 
-        Debug.LogError(loadJson.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
-        Debug.LogError(loadBinary.Load<Test>(test2.Key, Application.persistentDataPath + "/mainConfigFile"));
-    }
+        //Debug.LogError(loadJson.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
+        //Debug.LogError(loadBinary.Load<Test>(test2.Key, Application.persistentDataPath + "/mainConfigFile"));
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        saveProtoBuf.Save(test.Key, savePool.SaveDictionary, Application.persistentDataPath + "/mainConfigFile");
+        Debug.LogError(loadProtoBuf.Load<Test>(test.Key, Application.persistentDataPath + "/mainConfigFile"));
     }
 }

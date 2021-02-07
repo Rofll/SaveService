@@ -5,7 +5,6 @@ using UnityEngine;
 public class SavePool : ISavePool
 {
     Dictionary<string, object> saveDictionary;
-
     public Dictionary<string, object> SaveDictionary => saveDictionary;
 
     public SavePool()
