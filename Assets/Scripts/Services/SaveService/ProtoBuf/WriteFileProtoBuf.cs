@@ -14,7 +14,5 @@ public class WriteFileProtoBuf : IWriteFile<string>
             Serializer.Serialize(stream, data);
             stream.Flush();
         }
-
-        await Task.Delay(10);
     }
 }
