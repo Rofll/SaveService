@@ -4,6 +4,7 @@ using UnityEngine;
 using ProtoBuf;
 using System.IO;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 public class SaveProtoBuf : ISaveFile
 {
@@ -12,7 +13,7 @@ public class SaveProtoBuf : ISaveFile
     IReadFile<FileStream> readFile = new ReadFileProtoBuf();
     IWriteFile<string> writeFile = new WriteFileProtoBuf();
 
-    public void Save<T>(string key, T saveItem, string filePath)
+    public async Task Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
         {
@@ -30,7 +31,12 @@ public class SaveProtoBuf : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
+            Stream source = await readFile.GetContent(filePath);
+
+            jsonString = Serializer.Deserialize<string>(source);
+
+            Debug.LogError(jsonString);
+
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
             if (keyValuePairs.ContainsKey(key))
@@ -54,7 +60,7 @@ public class SaveProtoBuf : ISaveFile
         writeFile.WriteFile(filePath, jsonString);
     }
 
-    public void Save(Dictionary<string, object> itemsDictionary, string filePath)
+    public async Task Save(Dictionary<string, object> itemsDictionary, string filePath)
     {
         if (itemsDictionary == null)
         {
@@ -69,7 +75,12 @@ public class SaveProtoBuf : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
+            Stream source = await readFile.GetContent(filePath);
+
+            jsonString = Serializer.Deserialize<string>(source);
+
+            Debug.LogError(jsonString);
+
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
             foreach (var key in itemsDictionary.Keys)

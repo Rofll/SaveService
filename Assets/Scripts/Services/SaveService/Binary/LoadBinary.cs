@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class LoadBinary : ILoadFile
@@ -8,7 +9,7 @@ public class LoadBinary : ILoadFile
 
     IReadFile<Dictionary<string, object>> readFile = new ReadFileBinary();
 
-    public T Load<T>(string key, string filePath)
+    public async Task<T> Load<T>(string key, string filePath)
     {
         filePath += FILE_EXTENSION;
 
@@ -16,7 +17,7 @@ public class LoadBinary : ILoadFile
 
         if (readFile.Exists(filePath))
         {
-            keyValuePairs = readFile.GetContent(filePath);
+            keyValuePairs = await readFile.GetContent(filePath);
 
             if (keyValuePairs.ContainsKey(key))
             {

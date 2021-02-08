@@ -2,21 +2,19 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ProtoBuf;
 
-[ProtoContract]
 [System.Serializable]
-public class Test
+public class Test2
 {
-    [ProtoMember(1)]
     public string Key { get; set; } = "some";
-    [ProtoMember(2)]
     public string Name = "123";
-    [ProtoMember(3)]
     public int hp = 10;
+    private float mana = 0.35f;
+
+    public Test test = new Test();
 
     public override string ToString()
     {
-        return string.Format(Key + " " + Name + " " + hp);
+        return string.Format(Key + " " + Name + " " + hp + " " + mana + " " + test);
     }
 }

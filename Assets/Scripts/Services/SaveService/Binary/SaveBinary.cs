@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 
 public class SaveBinary : ISaveFile
 {
@@ -12,7 +13,7 @@ public class SaveBinary : ISaveFile
     IReadFile<Dictionary<string, object>> readFile = new ReadFileBinary();
     IWriteFile<Dictionary<string, object>> writeFile = new WriteFileBinary();
 
-    public void Save<T>(string key, T saveItem, string filePath)
+    public async Task Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
         {
@@ -34,7 +35,7 @@ public class SaveBinary : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            keyValuePairs = readFile.GetContent(filePath);
+            keyValuePairs = await readFile.GetContent(filePath);
 
             if (keyValuePairs.ContainsKey(key))
             {
@@ -55,7 +56,7 @@ public class SaveBinary : ISaveFile
         writeFile.WriteFile(filePath, keyValuePairs);
     }
 
-    public void Save(Dictionary<string, object> itemsDictionary, string filePath)
+    public async Task Save(Dictionary<string, object> itemsDictionary, string filePath)
     {
         if (itemsDictionary == null)
         {
@@ -75,7 +76,7 @@ public class SaveBinary : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            keyValuePairs = readFile.GetContent(filePath);
+            keyValuePairs = await readFile.GetContent(filePath);
 
             foreach (var key in itemsDictionary.Keys)
             {

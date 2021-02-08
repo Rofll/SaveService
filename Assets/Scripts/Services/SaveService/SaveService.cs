@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SaveService : ISaveService
@@ -31,7 +32,7 @@ public class SaveService : ISaveService
     private ILoadFile loadProtoBuf = new LoadProtoBuf();
 
 
-    public void Save<T>(string key, T saveItem, ESaveFormat saveFormat, string filePath = null)
+    public async Task Save<T>(string key, T saveItem, ESaveFormat saveFormat, string filePath = null)
     {
         if (saveFormat == ESaveFormat.PlayerPrefs)
         {
@@ -42,17 +43,17 @@ public class SaveService : ISaveService
         {
             if (saveFormat == ESaveFormat.Json)
             {
-                saveJson.Save(key, saveItem, filePath);
+                await saveJson.Save(key, saveItem, filePath);
             }
 
             else if (saveFormat == ESaveFormat.Binary)
             {
-                saveBinary.Save(key, saveItem, filePath);
+                await saveBinary.Save(key, saveItem, filePath);
             }
 
             else if (saveFormat == ESaveFormat.ProtoBuf)
             {
-                saveProtoBuf.Save(key, saveItem, filePath);
+                await saveProtoBuf.Save(key, saveItem, filePath);
             }
         }
 
@@ -62,7 +63,7 @@ public class SaveService : ISaveService
         }
     }
 
-    public void Save(Dictionary<string, object> itemsDictionary, ESaveFormat saveFormat, string filePath = null)
+    public async Task Save(Dictionary<string, object> itemsDictionary, ESaveFormat saveFormat, string filePath = null)
     {
         if (saveFormat == ESaveFormat.PlayerPrefs)
         {
@@ -73,17 +74,17 @@ public class SaveService : ISaveService
         {
             if (saveFormat == ESaveFormat.Json)
             {
-                saveJson.Save(itemsDictionary, filePath);
+                await saveJson.Save(itemsDictionary, filePath);
             }
 
             else if (saveFormat == ESaveFormat.Binary)
             {
-                saveBinary.Save(itemsDictionary, filePath);
+                await saveBinary.Save(itemsDictionary, filePath);
             }
 
             else if (saveFormat == ESaveFormat.ProtoBuf)
             {
-                saveProtoBuf.Save(itemsDictionary, filePath);
+                await saveProtoBuf.Save(itemsDictionary, filePath);
             }
         }
 
@@ -93,7 +94,7 @@ public class SaveService : ISaveService
         }
     }
 
-    public T Load<T>(string key, ESaveFormat saveFormat, string filePath = null)
+    public async Task<T> Load<T>(string key, ESaveFormat saveFormat, string filePath = null)
     {
 
         if (string.IsNullOrEmpty(key))
@@ -118,17 +119,17 @@ public class SaveService : ISaveService
         {
             if (saveFormat == ESaveFormat.Json)
             {
-                return loadJson.Load<T>(key, filePath);
+                return await loadJson.Load<T>(key, filePath);
             }
 
             else if (saveFormat == ESaveFormat.Binary)
             {
-                return loadBinary.Load<T>(key, filePath);
+                return await loadBinary.Load<T>(key, filePath);
             }
 
             else if (saveFormat == ESaveFormat.ProtoBuf)
             {
-                return loadProtoBuf.Load<T>(key, filePath);
+                return await loadProtoBuf.Load<T>(key, filePath);
             }
         }
 

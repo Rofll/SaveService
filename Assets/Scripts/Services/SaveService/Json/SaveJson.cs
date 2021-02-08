@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 public class SaveJson : ISaveFile
 {
     const string FILE_EXTENSION = ".json";
 
     IReadFile<string> readFile = new ReadFileJson();
+
     IWriteFile<string> writeFile = new WriteFileJson();
 
-    public void Save<T>(string key, T saveItem, string filePath)
+    public async Task Save<T>(string key, T saveItem, string filePath)
     {
         if (string.IsNullOrEmpty(key))
         {
             Debug.LogError("Key = nullOrEmpty!");
-            return;
         }
 
         filePath += FILE_EXTENSION;
@@ -27,7 +28,7 @@ public class SaveJson : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            string data = readFile.GetContent(filePath);
+            string data = await readFile.GetContent(filePath);
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
             if (keyValuePairs.ContainsKey(key))
@@ -48,15 +49,14 @@ public class SaveJson : ISaveFile
 
         string jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
-        writeFile.WriteFile(filePath, jsonString);
+        await writeFile.WriteFile(filePath, jsonString);
     }
 
-    public void Save(Dictionary<string, object> itemsDictionary, string filePath)
+    public async Task Save(Dictionary<string, object> itemsDictionary, string filePath)
     {
         if (itemsDictionary == null)
         {
             Debug.LogError("ItemsDictionary = null!");
-            return;
         }
 
         filePath += FILE_EXTENSION;
@@ -65,7 +65,7 @@ public class SaveJson : ISaveFile
 
         if (readFile.Exists(filePath))
         {
-            string data = readFile.GetContent(filePath);
+            string data = await readFile.GetContent(filePath);
 
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
@@ -96,6 +96,6 @@ public class SaveJson : ISaveFile
 
         string jsonString = JsonConvert.SerializeObject(keyValuePairs);
 
-        writeFile.WriteFile(filePath, jsonString);
+        await writeFile.WriteFile(filePath, jsonString);
     }
 }

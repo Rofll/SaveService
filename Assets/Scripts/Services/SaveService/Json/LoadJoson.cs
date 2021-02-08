@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class LoadJoson : ILoadFile
@@ -11,7 +12,7 @@ public class LoadJoson : ILoadFile
 
     IReadFile<string> readFile = new ReadFileJson();
 
-    public T Load<T>(string key, string filePath)
+    public async Task<T> Load<T>(string key, string filePath)
     {
         filePath += FILE_EXTENSION;
 
@@ -19,7 +20,10 @@ public class LoadJoson : ILoadFile
         {
             
             Dictionary<string, object> keyValuePairs;
-            keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(readFile.GetContent(filePath));
+
+            string value = await readFile.GetContent(filePath);
+
+            keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(value);
 
             if (keyValuePairs.ContainsKey(key))
             {

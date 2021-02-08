@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class WriteFileBinary : IWriteFile<Dictionary<string, object>>
@@ -17,7 +18,7 @@ public class WriteFileBinary : IWriteFile<Dictionary<string, object>>
         };
     }
 
-    public void WriteFile(string filePath, Dictionary<string, object> data)
+    public async Task WriteFile(string filePath, Dictionary<string, object> data)
     {
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {

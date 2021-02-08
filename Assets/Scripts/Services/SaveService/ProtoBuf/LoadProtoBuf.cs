@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using ProtoBuf;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 public class LoadProtoBuf : ILoadFile
 {
@@ -12,7 +13,7 @@ public class LoadProtoBuf : ILoadFile
 
     IReadFile<FileStream> readFile = new ReadFileProtoBuf();
 
-    public T Load<T>(string key, string filePath)
+    public async Task<T> Load<T>(string key, string filePath)
     {
         filePath += FILE_EXTENSION;
 
@@ -20,7 +21,11 @@ public class LoadProtoBuf : ILoadFile
         {
             Dictionary<string, object> keyValuePairs;
 
-            string jsonString = Serializer.Deserialize<string>(readFile.GetContent(filePath));
+            FileStream fileStream = await readFile.GetContent(filePath);
+
+            string jsonString = Serializer.Deserialize<string>(fileStream);
+
+            Debug.LogError(jsonString);
 
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 

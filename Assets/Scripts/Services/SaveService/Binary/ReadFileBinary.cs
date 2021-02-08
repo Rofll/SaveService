@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ReadFileBinary : IReadFile<Dictionary<string, object>>
@@ -22,7 +23,7 @@ public class ReadFileBinary : IReadFile<Dictionary<string, object>>
         return File.Exists(path);
     }
 
-    public Dictionary<string, object> GetContent(string path)
+    public async Task<Dictionary<string, object>> GetContent(string path)
     {
         byte[] data = File.ReadAllBytes(path);
 
