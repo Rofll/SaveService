@@ -6,5 +6,6 @@ public enum ESaveFormat
 {
     PlayerPrefs = 0,
     Json,
-    Binary
+    Binary,
+    ProtoBuf
 }

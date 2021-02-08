@@ -21,8 +21,6 @@ public class SaveJson : ISaveFile
 
         filePath += FILE_EXTENSION;
 
-        Debug.LogError(filePath);
-
         object jsonData = saveItem;
 
         Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();

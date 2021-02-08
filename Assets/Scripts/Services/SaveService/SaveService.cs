@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveService : ISaveService
@@ -26,39 +27,73 @@ public class SaveService : ISaveService
     private ILoadFile loadJson = new LoadJoson();
     private ISaveFile saveBinary = new SaveBinary();
     private ILoadFile loadBinary = new LoadBinary();
+    private ISaveFile saveProtoBuf = new SaveProtoBuf();
+    private ILoadFile loadProtoBuf = new LoadProtoBuf();
 
- 
-    public void Save<T>(string key, T saveItem, ESaveFormat saveFormat = ESaveFormat.PlayerPrefs, string filePath = null)
+
+    public void Save<T>(string key, T saveItem, ESaveFormat saveFormat, string filePath = null)
     {
         if (saveFormat == ESaveFormat.PlayerPrefs)
         {
             savePalyerPrefs.Save(key, saveItem);
         }
 
-        else if (saveFormat == ESaveFormat.Json)
+        else if (!string.IsNullOrEmpty(filePath))
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (saveFormat == ESaveFormat.Json)
             {
-                Debug.LogError("FilePath = nullOrEmpty!");
-                return;
+                saveJson.Save(key, saveItem, filePath);
             }
-            
-            saveJson.Save(key, saveItem, filePath);
+
+            else if (saveFormat == ESaveFormat.Binary)
+            {
+                saveBinary.Save(key, saveItem, filePath);
+            }
+
+            else if (saveFormat == ESaveFormat.ProtoBuf)
+            {
+                saveProtoBuf.Save(key, saveItem, filePath);
+            }
         }
 
-        else if (saveFormat == ESaveFormat.Binary)
+        else
         {
-            if (string.IsNullOrEmpty(filePath))
-            {
-                Debug.LogError("FilePath = nullOrEmpty!");
-                return;
-            }
-
-            saveBinary.Save(key, saveItem, filePath);
+            Debug.LogError("FilePath = nullOrEmpty!");
         }
     }
 
-    public T Load<T>(string key, ESaveFormat saveFormat = ESaveFormat.PlayerPrefs, string filePath = null)
+    public void Save(Dictionary<string, object> itemsDictionary, ESaveFormat saveFormat, string filePath = null)
+    {
+        if (saveFormat == ESaveFormat.PlayerPrefs)
+        {
+            savePalyerPrefs.Save(itemsDictionary);
+        }
+
+        else if (!string.IsNullOrEmpty(filePath))
+        {
+            if (saveFormat == ESaveFormat.Json)
+            {
+                saveJson.Save(itemsDictionary, filePath);
+            }
+
+            else if (saveFormat == ESaveFormat.Binary)
+            {
+                saveBinary.Save(itemsDictionary, filePath);
+            }
+
+            else if (saveFormat == ESaveFormat.ProtoBuf)
+            {
+                saveProtoBuf.Save(itemsDictionary, filePath);
+            }
+        }
+
+        else
+        {
+            Debug.LogError("FilePath = nullOrEmpty!");
+        }
+    }
+
+    public T Load<T>(string key, ESaveFormat saveFormat, string filePath = null)
     {
 
         if (string.IsNullOrEmpty(key))
@@ -89,6 +124,11 @@ public class SaveService : ISaveService
             else if (saveFormat == ESaveFormat.Binary)
             {
                 return loadBinary.Load<T>(key, filePath);
+            }
+
+            else if (saveFormat == ESaveFormat.ProtoBuf)
+            {
+                return loadProtoBuf.Load<T>(key, filePath);
             }
         }
 

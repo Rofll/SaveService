@@ -23,7 +23,19 @@ public class LoadJoson : ILoadFile
 
             if (keyValuePairs.ContainsKey(key))
             {
-                return (keyValuePairs[key] as JObject).ToObject<T>();
+                JObject jObject = keyValuePairs[key] as JObject;
+
+                if (jObject != null)
+                {
+                    return jObject.ToObject<T>();
+                }
+
+                else
+                {
+                    JValue jValue = new JValue(keyValuePairs[key]);
+
+                    return jValue.ToObject<T>();
+                }
             }
 
             else
