@@ -48,7 +48,7 @@ public class SaveServiceTest : MonoBehaviour
     private async Task Save()
     {
 
-        for (int i = 0; i <= (int)ESaveFormat.ProtoBuf; i++)
+        for (int i = 0; i <= (int)ESaveFormat.Binary; i++)
         {
             ESaveFormat eSaveFormat = (ESaveFormat)i;
 
@@ -63,7 +63,7 @@ public class SaveServiceTest : MonoBehaviour
 
     private async Task Load()
     {
-        for (int i = 0; i <= (int)ESaveFormat.ProtoBuf; i++)
+        for (int i = 0; i <= (int)ESaveFormat.Binary; i++)
         {
             ESaveFormat eSaveFormat = (ESaveFormat)i;
 

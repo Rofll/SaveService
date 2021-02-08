@@ -28,8 +28,8 @@ public class SaveService : ISaveService
     private ILoadFile loadJson = new LoadJoson();
     private ISaveFile saveBinary = new SaveBinary();
     private ILoadFile loadBinary = new LoadBinary();
-    private ISaveFile saveProtoBuf = new SaveProtoBuf();
-    private ILoadFile loadProtoBuf = new LoadProtoBuf();
+    //private ISaveFile saveProtoBuf = new SaveProtoBuf();
+    //private ILoadFile loadProtoBuf = new LoadProtoBuf();
 
 
     public async Task Save<T>(string key, T saveItem, ESaveFormat saveFormat, string filePath = null)
@@ -51,10 +51,10 @@ public class SaveService : ISaveService
                 await saveBinary.Save(key, saveItem, filePath);
             }
 
-            else if (saveFormat == ESaveFormat.ProtoBuf)
-            {
-                await saveProtoBuf.Save(key, saveItem, filePath);
-            }
+            //else if (saveFormat == ESaveFormat.ProtoBuf)
+            //{
+            //    await saveProtoBuf.Save(key, saveItem, filePath);
+            //}
         }
 
         else
@@ -82,10 +82,10 @@ public class SaveService : ISaveService
                 await saveBinary.Save(itemsDictionary, filePath);
             }
 
-            else if (saveFormat == ESaveFormat.ProtoBuf)
-            {
-                await saveProtoBuf.Save(itemsDictionary, filePath);
-            }
+            //else if (saveFormat == ESaveFormat.ProtoBuf)
+            //{
+            //    await saveProtoBuf.Save(itemsDictionary, filePath);
+            //}
         }
 
         else
@@ -127,10 +127,10 @@ public class SaveService : ISaveService
                 return await loadBinary.Load<T>(key, filePath);
             }
 
-            else if (saveFormat == ESaveFormat.ProtoBuf)
-            {
-                return await loadProtoBuf.Load<T>(key, filePath);
-            }
+            //else if (saveFormat == ESaveFormat.ProtoBuf)
+            //{
+            //    return await loadProtoBuf.Load<T>(key, filePath);
+            //}
         }
 
         Debug.LogError("No SaveFormat chosen!");
