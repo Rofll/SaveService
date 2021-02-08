@@ -28,6 +28,7 @@ public class SaveServiceTest : MonoBehaviour
         test2.Key = "test2";
         test3.Key = "test3";
         test4.Key = "test4";
+        test4.test.Key = "test5";
 
         test2.hp = 20;
         test3.hp = 30;
