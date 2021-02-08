@@ -42,7 +42,7 @@ public class SaveServiceTest : MonoBehaviour
     private async Task SaveLoadTest()
     {
         await Save();
-        //await Load();
+        await Load();
     }
 
     private async Task Save()

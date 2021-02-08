@@ -35,8 +35,6 @@ public class SaveProtoBuf : ISaveFile
 
             jsonString = Serializer.Deserialize<string>(source);
 
-            Debug.LogError(jsonString);
-
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
             if (keyValuePairs.ContainsKey(key))
@@ -78,8 +76,6 @@ public class SaveProtoBuf : ISaveFile
             Stream source = await readFile.GetContent(filePath);
 
             jsonString = Serializer.Deserialize<string>(source);
-
-            Debug.LogError(jsonString);
 
             keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 

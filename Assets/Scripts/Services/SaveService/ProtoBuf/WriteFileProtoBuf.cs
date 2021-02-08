@@ -9,8 +9,6 @@ public class WriteFileProtoBuf : IWriteFile<string>
 {
     public async Task WriteFile(string filePath, string data)
     {
-        Debug.LogError(data);
-
         using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
         {
             Serializer.Serialize(stream, data);
