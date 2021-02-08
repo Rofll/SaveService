@@ -4,24 +4,6 @@ using UnityEngine;
 
 public class SaveService : ISaveService
 {
-    public SaveService()
-    {
-        instance = this;
-    }
-
-    private SaveService instance;
-    public SaveService Instance {
-        get 
-        {
-            if (instance == null)
-            {
-                instance = new SaveService();
-            }
-
-            return instance;
-        }
-    }
-
     private ISavePalyerPrefs savePalyerPrefs = new SavePlayerPrefs();
     private ILoadPalyerPrefs loadPalyerPrefs = new LoadPlayerPrefs();
     private ISaveFile saveJson = new SaveJson();
